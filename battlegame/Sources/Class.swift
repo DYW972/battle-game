@@ -7,7 +7,7 @@
 //
 import Foundation
 
-//Player Class
+// Player Class
 class Player {
     
     // Properties
@@ -21,9 +21,23 @@ class Player {
     init(name:String){
         self.name = name
     }
+    
+    // Methods
+    
+    // Player rename
+    func renamePlayer(with newName: String){
+        self.name = newName
+    }
+    
+    // Player choose fighters
+    func playerChooseFighters(fighters: Character){
+        self.fighters.append(fighters)
+    }
 }
 
-//Characters class
+// Maybe I will extend character class with different children
+
+// Characters class
 class Character {
     
     // Properties
@@ -74,7 +88,7 @@ class Character {
     
     // Character heals teammate
     func healTeammate(target: Character){
-        let healingPotion = 30
+        let healingPotion = 30 // Will be better to add healing potion in the lotery chest with different value 
         print("\(name) gives \(target.name) healing potion.")
         target.health += healingPotion
         print("\(target.name) got \(healingPotion) health points.")
