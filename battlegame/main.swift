@@ -13,6 +13,8 @@ import Foundation
 var playerOne = Player(name:"PlayerOne")
 //Player two
 var playerTwo = Player(name:"PlayerTwo")
+//Fighters
+let fighters = ["Thanos","Odin","Zeus","Athena","Hera","Valkyrie","Groot","StarLord","Marvel"]
 
 
 // MARK: FUNCTIONS
@@ -20,15 +22,13 @@ var playerTwo = Player(name:"PlayerTwo")
 // 1. Game menu start
 func presentMenu(){
     
-    let welcomeMessage = Messages.welcome.rawValue
-    print(welcomeMessage)
+    print(Messages.welcome.rawValue)
     
     switch true {
         
     case playerOne.fighters.count == 0  && playerTwo.fighters.count == 0 :
         
-        let chooseYourSideMessage = Messages.chooseYourSide.rawValue
-        print(chooseYourSideMessage)
+        print(Messages.chooseYourSide.rawValue)
         
         // Get player choice
         if let choice = readLine(){
@@ -48,8 +48,7 @@ func presentMenu(){
             default:
                 
                 //Please select option 1 or 2
-                let only1or2ErrorMessage = ErrorMessage.chooseYourSide.rawValue
-                print(only1or2ErrorMessage)
+                print(ErrorMessage.chooseYourSide.rawValue)
                 
                 //Restart the programme
                 presentMenu()
@@ -58,24 +57,21 @@ func presentMenu(){
         
     case playerOne.fighters.count == 0:
         
-        let choosePlayerOneMessage = Messages.choosePlayerOne.rawValue
-        print(choosePlayerOneMessage)
+        print(Messages.choosePlayerOne.rawValue)
         
         // Create player one
         renamePlayer(player: playerOne)
         
     case playerTwo.fighters.count == 0:
         
-        let choosePlayerTwoMessage = Messages.choosePlayerTwo.rawValue
-        print(choosePlayerTwoMessage)
+        print(Messages.choosePlayerTwo.rawValue)
         
         // Create player two
         renamePlayer(player: playerTwo)
         
     case playerOne.fighters.count == 3  && playerTwo.fighters.count == 3 :
         
-        let playersReadyToFightMessage = Messages.playersReadyToFight.rawValue
-        print(playersReadyToFightMessage)
+        print(Messages.playersReadyToFight.rawValue)
         
         print("Player One Team:")
         for fighter in playerOne.fighters{
@@ -102,8 +98,7 @@ func presentMenu(){
 // 2. Let player add his name
 func renamePlayer(player: Player){
     
-    let whatIsYourName = Messages.whatIsYourName.rawValue
-    print(whatIsYourName)
+    print(Messages.whatIsYourName.rawValue)
     
     if let newName = readLine(){
         player.name = newName
@@ -116,19 +111,15 @@ func renamePlayer(player: Player){
 
 // 3. Player select fighters menu
 func chooseFighters(player: Player){
+    
     while player.fighters.count < 3 {
-        print("\n"
-            + "\nChoose 3 fighters: "
-            + "\n1. Thanos"
-            + "\n2. Odin"
-            + "\n3. Zeus"
-            + "\n4. Athena"
-            + "\n5. Hera"
-            + "\n6. Valkyrie"
-            + "\n7. Groot"
-            + "\n8. StarLord"
-            + "\n9. Marvel"
-            + "\n")
+        
+        print(Messages.chooseFighter.rawValue)
+        
+        for (index,fighter) in fighters.enumerated(){
+            print("\(index+1).\(fighter)")
+        }
+        print("\nType fighter number :")
         
         if let choice = readLine() {
             //Select a figther to add in the team
@@ -162,10 +153,7 @@ func chooseFighters(player: Player){
                 player.fighters.append(fighter)
             default:
                 //The player did not select an option between 1 & 9
-                print("\n"
-                    + "\nSorry but I did not understand."
-                    + "\n Choose a fighters between the nine proposed."
-                    + "\n")
+                print(ErrorMessage.chooseFighters.rawValue)
                 chooseFighters(player: player)
             }
             //Display fighters selection informations
@@ -188,11 +176,7 @@ func chooseFighters(player: Player){
 // 4. Ask player for renaming fighters.
 func askForRenaming(player: Player){
     
-    let askForRenameFighterMessage = Messages.askForRenameFighter.rawValue
-    let noRenamingMessage = Messages.noRenaming.rawValue
-    let yesOrNoErrorMessage = ErrorMessage.yesOrNoToRename.rawValue
-    
-    print(askForRenameFighterMessage)
+    print(Messages.askForRenameFighter.rawValue)
     
     if let choice = readLine(){
         switch choice.lowercased() {
@@ -202,7 +186,7 @@ func askForRenaming(player: Player){
             
         case "no":
             
-            print(noRenamingMessage)
+            print(Messages.noRenaming.rawValue)
             
             for fighter in player.fighters{
                 print("\n\(fighter.name)     ❤️  :\(fighter.health)    💥:\(fighter.attack)    ⚔️  :\(fighter.weapon)")
@@ -211,7 +195,7 @@ func askForRenaming(player: Player){
             
         default:
             
-            print(yesOrNoErrorMessage)
+            print(ErrorMessage.yesOrNoToRename.rawValue)
             
             askForRenaming(player: player)
         }
@@ -221,19 +205,14 @@ func askForRenaming(player: Player){
 // 5. Select fighter to rename
 func wichFighterToRename(player: Player){
     
-    let wichFighterYouWantToRenameMessage = Messages.wichFighterToRename.rawValue
-    let finishMessage = Messages.finish.rawValue
-    let renamingTerminatedMessage = Messages.renamingTerminated.rawValue
-    let chooseFighterToRenameErrorMessage = ErrorMessage.chooseFigterToRename.rawValue
-    
-    print(wichFighterYouWantToRenameMessage)
+    print(Messages.wichFighterToRename.rawValue)
     
     for (index, fighter) in player.fighters.enumerated(){
         print("\(index + 1). \(fighter.name)"
             + "\n")
     }
     
-    print(finishMessage)
+    print(Messages.finish.rawValue)
     
     if let choice = readLine() {
         switch choice {
@@ -250,7 +229,7 @@ func wichFighterToRename(player: Player){
             renameFighter(fighter: player.fighters[2], player: player)
             
         case "yes":
-            print(renamingTerminatedMessage)
+            print(Messages.renamingTerminated.rawValue)
             
             // Display player team
             for fighter in player.fighters{
@@ -259,15 +238,14 @@ func wichFighterToRename(player: Player){
             presentMenu()
             
         default :
-            print(chooseFighterToRenameErrorMessage)
+            print(ErrorMessage.chooseFighterToRename.rawValue)
             wichFighterToRename(player: player)
         }
     }
 }
 
 func renameFighter(fighter: Character, player: Player){
-    let giveFighterNewNameMessage = Messages.giveFighterNewName.rawValue
-    print(giveFighterNewNameMessage)
+    print(Messages.giveFighterNewName.rawValue)
     
     if let newName = readLine() {
         fighter.name = newName
@@ -284,4 +262,5 @@ func weaponChest(attacker: Character){
     attacker.attack = newAttackPoint
 }
 
-presentMenu()
+//presentMenu()
+print(Messages.askForRenameFighter.rawValue)

@@ -47,6 +47,10 @@ enum Messages: String {
     What's your Name ?
     
     """
+    case chooseFighter = """
+    Choose 3 fighters to add in your team :
+    
+    """
     case askForRenameFighter = """
     Do you want to rename your figthers? yes/no
     
@@ -85,7 +89,11 @@ enum ErrorMessage: String {
     You can only use numbers 1 or 2 to choose your side.
     
     """
-    case chooseFigterToRename = """
+    case chooseFighters = """
+    You can only use numbers 1 to 9 for choosing a fighter.
+    
+    """
+    case chooseFighterToRename = """
     You can only use numbers 1, 2 or 3 to rename a fighter.
     
     """
