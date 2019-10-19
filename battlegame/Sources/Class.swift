@@ -24,11 +24,6 @@ class Player {
     
     // Methods
     
-    // Player rename
-    func renamePlayer(with newName: String){
-        self.name = newName
-    }
-    
     // Player choose fighters
     func playerChooseFighters(fighters: Character){
         self.fighters.append(fighters)

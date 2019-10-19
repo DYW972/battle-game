@@ -19,107 +19,94 @@ var playerTwo = Player(name:"PlayerTwo")
 
 // 1. Game menu start
 func presentMenu(){
-    print("\n============================"
-        + "\n== Welcome in Battle Game =="
-        + "\n============================")
+    
+    let welcomeMessage = Messages.welcome.rawValue
+    print(welcomeMessage)
+    
     switch true {
-    case playerOne.fighters.count == 0  && playerTwo.fighters.count == 0 :
-        print("\n"
-            + "\nChoose your side"
-            + "\n1. Player One"
-            + "\n2. Player Two"
-            + "\n")
         
-        // Get Users choice
+    case playerOne.fighters.count == 0  && playerTwo.fighters.count == 0 :
+        
+        let chooseYourSideMessage = Messages.chooseYourSide.rawValue
+        print(chooseYourSideMessage)
+        
+        // Get player choice
         if let choice = readLine(){
+            
             switch choice {
+                
             case "1":
-                //Create player one object
-                //givePlayerOneName()
-                addNameToPlayer(rank: choice)
+                
+                //Create player one
+                renamePlayer(player: playerOne)
+                
             case "2":
-                //Create player two object
-                addNameToPlayer(rank: choice)
+                
+                //Create player two
+                renamePlayer(player: playerTwo)
+                
             default:
+                
                 //Please select option 1 or 2
-                print("\n"
-                    + "\nSorry I don't understand your choice."
-                    + "\n")
+                let only1or2ErrorMessage = ErrorMessage.chooseYourSide.rawValue
+                print(only1or2ErrorMessage)
+                
                 //Restart the programme
                 presentMenu()
             }
         }
+        
+    case playerOne.fighters.count == 0:
+        
+        let choosePlayerOneMessage = Messages.choosePlayerOne.rawValue
+        print(choosePlayerOneMessage)
+        
+        // Create player one
+        renamePlayer(player: playerOne)
         
     case playerTwo.fighters.count == 0:
-        print("Player One ready to fight")
-        print("\n"
-            + "\nChoose your side"
-            + "\n2. Player Two"
-            + "\n")
-        // Get Users choice
-        if let choice = readLine(){
-            if choice == "2"{
-                //Create player one object
-                addNameToPlayer(rank: choice)
-            } else {
-                //Please select option 2
-                print("\n"
-                    + "\nI'm sorry but you can only choose option : 2."
-                    + "\n")
-                //Restart the programme
-                presentMenu()
-            }
-        }
-    case playerOne.fighters.count == 0:
-        print("Player Two ready to fight")
-        print("\n"
-            + "\nChoose your side"
-            + "\n1. Player One"
-            + "\n")
-        // Get Users choice
-        if let choice = readLine(){
-            if choice == "1"{
-                //Create player one object
-                addNameToPlayer(rank: choice)
-            } else {
-                //Please select option 1
-                print("\n"
-                    + "\nI'm sorry but you can only choose option : 1."
-                    + "\n")
-                //Restart the programme
-                presentMenu()
-            }
-        }
+        
+        let choosePlayerTwoMessage = Messages.choosePlayerTwo.rawValue
+        print(choosePlayerTwoMessage)
+        
+        // Create player two
+        renamePlayer(player: playerTwo)
+        
     case playerOne.fighters.count == 3  && playerTwo.fighters.count == 3 :
-        print("""
-                Well, both of you are ready to fight !
-
-                Player One Team :
-
-                """)
+        
+        let playersReadyToFightMessage = Messages.playersReadyToFight.rawValue
+        print(playersReadyToFightMessage)
+        
+        print("Player One Team:")
         for fighter in playerOne.fighters{
-            print("\n\(fighter.name)     ❤️  :\(fighter.health)    💥:\(fighter.attack)    ⚔️  :\(fighter.weapon)")
+            print("""
+                \(fighter.name)     ❤️  :\(fighter.health)    💥:\(fighter.attack)    ⚔️  :\(fighter.weapon)
+                
+                
+                """)
         }
         
-        print("\n"
-            + "\nPlayer Two Team :"
-            + "\n")
+        print("Player Two Team:")
         for fighter in playerTwo.fighters{
-            print("\n\(fighter.name)     ❤️  :\(fighter.health)    💥:\(fighter.attack)    ⚔️  :\(fighter.weapon)")
+            print("""
+                \(fighter.name)     ❤️  :\(fighter.health)    💥:\(fighter.attack)    ⚔️  :\(fighter.weapon)
+                
+                
+                """)
         }
     default :
-        print("Choose your side.")
+        presentMenu()
     }
 }
 
 // 2. Let player add his name
-func addNameToPlayer(rank: String){
-    print("\n"
-        + "\nWhat's your name ?"
-        + "\n")
-    if let name = readLine(){
-        let player = rank == "1" ? playerOne : playerTwo
-        player.name = name
+func renamePlayer(player: Player){
+    
+    let whatIsYourName = Messages.whatIsYourName.rawValue
+    print(whatIsYourName)
+    
+    if let newName = readLine(){
+        player.name = newName
         print("\n"
             + "\nWelcome \(player.name)"
             + "\n")
@@ -127,84 +114,7 @@ func addNameToPlayer(rank: String){
     }
 }
 
-// Give player's fighters a unique name function
-func wichFighterToRename(player: Player){
-    print("\n"
-        + "\nWich fighter you want to rename?"
-        + "\n")
-    
-    for (index, fighter) in player.fighters.enumerated(){
-        print("\(index + 1). \(fighter.name)"
-            + "\n")
-    }
-    print("Finish ? yes/no"
-        + "\n")
-    
-    if let choice = readLine() {
-        switch choice {
-        case "1":
-            print(player.fighters[0].name)
-            
-        case "2":
-            print(player.fighters[1].name)
-            
-        case "3":
-            print(player.fighters[2].name)
-            
-        case "yes":
-            print("\n"
-                + "\nRenaming terminated."
-                + "\n")
-            
-        default :
-            print("I did not understand your choice.")
-            wichFighterToRename(player: player)
-        }
-        
-        if choice == "yes" {
-            print("\n"
-                + "\nWell done. Now take a last look at your team :"
-                + "\n")
-            for fighter in player.fighters{
-                print("\n\(fighter.name)     ❤️  :\(fighter.health)    💥:\(fighter.attack)    ⚔️  :\(fighter.weapon)")
-            }
-            presentMenu()
-        } else {
-            wichFighterToRename(player: player)
-        }
-    }
-}
-
-// Ask player for renaming fighters.
-func askForRenaming(player: Player){
-    print("\n"
-        + "\nDo you want to rename your figthers? yes/no"
-        + "\n")
-    
-    if let choice = readLine(){
-        switch choice.lowercased() {
-        case "yes":
-            print("\n"
-                + "\nOk. You want to rename your figthers."
-                + "\n")
-            wichFighterToRename(player: player)
-        case "no":
-            print("\n"
-                + "\nWell done. Now take a last look at your team :"
-                + "\n")
-            for fighter in player.fighters{
-                print("\n\(fighter.name)     ❤️  :\(fighter.health)    💥:\(fighter.attack)    ⚔️  :\(fighter.weapon)")
-            }
-            presentMenu()
-        default:
-            print("Sorry but I did not understand."
-                + "\n")
-            askForRenaming(player: player)
-        }
-    }
-}
-
-//Player select fighters menu
+// 3. Player select fighters menu
 func chooseFighters(player: Player){
     while player.fighters.count < 3 {
         print("\n"
@@ -275,11 +185,103 @@ func chooseFighters(player: Player){
     askForRenaming(player: player)
 }
 
+// 4. Ask player for renaming fighters.
+func askForRenaming(player: Player){
+    
+    let askForRenameFighterMessage = Messages.askForRenameFighter.rawValue
+    let noRenamingMessage = Messages.noRenaming.rawValue
+    let yesOrNoErrorMessage = ErrorMessage.yesOrNoToRename.rawValue
+    
+    print(askForRenameFighterMessage)
+    
+    if let choice = readLine(){
+        switch choice.lowercased() {
+        case "yes":
+            
+            wichFighterToRename(player: player)
+            
+        case "no":
+            
+            print(noRenamingMessage)
+            
+            for fighter in player.fighters{
+                print("\n\(fighter.name)     ❤️  :\(fighter.health)    💥:\(fighter.attack)    ⚔️  :\(fighter.weapon)")
+            }
+            presentMenu()
+            
+        default:
+            
+            print(yesOrNoErrorMessage)
+            
+            askForRenaming(player: player)
+        }
+    }
+}
 
-//Add a super weapon lotery possibility function
+// 5. Select fighter to rename
+func wichFighterToRename(player: Player){
+    
+    let wichFighterYouWantToRenameMessage = Messages.wichFighterToRename.rawValue
+    let finishMessage = Messages.finish.rawValue
+    let renamingTerminatedMessage = Messages.renamingTerminated.rawValue
+    let chooseFighterToRenameErrorMessage = ErrorMessage.chooseFigterToRename.rawValue
+    
+    print(wichFighterYouWantToRenameMessage)
+    
+    for (index, fighter) in player.fighters.enumerated(){
+        print("\(index + 1). \(fighter.name)"
+            + "\n")
+    }
+    
+    print(finishMessage)
+    
+    if let choice = readLine() {
+        switch choice {
+        case "1":
+            print(player.fighters[0].name)
+            renameFighter(fighter: player.fighters[0], player: player)
+            
+        case "2":
+            print(player.fighters[1].name)
+            renameFighter(fighter: player.fighters[1], player: player)
+            
+        case "3":
+            print(player.fighters[2].name)
+            renameFighter(fighter: player.fighters[2], player: player)
+            
+        case "yes":
+            print(renamingTerminatedMessage)
+            
+            // Display player team
+            for fighter in player.fighters{
+                print("\n\(fighter.name)     ❤️  :\(fighter.health)    💥:\(fighter.attack)    ⚔️  :\(fighter.weapon)")
+            }
+            presentMenu()
+            
+        default :
+            print(chooseFighterToRenameErrorMessage)
+            wichFighterToRename(player: player)
+        }
+    }
+}
+
+func renameFighter(fighter: Character, player: Player){
+    let giveFighterNewNameMessage = Messages.giveFighterNewName.rawValue
+    print(giveFighterNewNameMessage)
+    
+    if let newName = readLine() {
+        fighter.name = newName
+    }
+    
+    wichFighterToRename(player: player)
+}
+
+// Add a super weapon lotery possibility function
 func weaponChest(attacker: Character){
     let weapons = ["Magic Fire Sword", "Magic Thunder Spear", "Mjöllnir", "Gungnir", "Caducée", "Trisula", "Vajra", "Balizarde", "Andúril", "Alastor", "Aubéclat", "Bakuzan", "Dard", "Dragon Slayer", "Dimension Sword", "Excalibur", "Glace", "Masamuné", "Master Sword", "Murasame", "Orcrist", "Sakabato", "Samehada", "Wadô Ichimonji", "Zanpakutō"]
     let newAttackPoint = Int.random(in:0..<100)
     attacker.weapon = weapons.randomElement()!
     attacker.attack = newAttackPoint
 }
+
+presentMenu()
