@@ -90,6 +90,9 @@ func presentMenu(){
                 
                 """)
         }
+        
+        battleStart()
+        
     default :
         presentMenu()
     }
@@ -165,11 +168,6 @@ func chooseFighters(player: Player){
         }
     }
     //Team is complete, now allow the player to rename fighters.
-    print("\n"
-        + "\nGood, you have your 3 figthers in your team."
-        + "\nNow you can give them a unique name if you want."
-        + "\n")
-    
     askForRenaming(player: player)
 }
 
@@ -217,15 +215,12 @@ func wichFighterToRename(player: Player){
     if let choice = readLine() {
         switch choice {
         case "1":
-            print(player.fighters[0].name)
             renameFighter(fighter: player.fighters[0], player: player)
             
         case "2":
-            print(player.fighters[1].name)
             renameFighter(fighter: player.fighters[1], player: player)
             
         case "3":
-            print(player.fighters[2].name)
             renameFighter(fighter: player.fighters[2], player: player)
             
         case "yes":
@@ -244,6 +239,7 @@ func wichFighterToRename(player: Player){
     }
 }
 
+// 6. Rename fighter
 func renameFighter(fighter: Character, player: Player){
     print(Messages.giveFighterNewName.rawValue)
     
@@ -254,13 +250,47 @@ func renameFighter(fighter: Character, player: Player){
     wichFighterToRename(player: player)
 }
 
-// Add a super weapon lotery possibility function
-func weaponChest(attacker: Character){
-    let weapons = ["Magic Fire Sword", "Magic Thunder Spear", "Mjöllnir", "Gungnir", "Caducée", "Trisula", "Vajra", "Balizarde", "Andúril", "Alastor", "Aubéclat", "Bakuzan", "Dard", "Dragon Slayer", "Dimension Sword", "Excalibur", "Glace", "Masamuné", "Master Sword", "Murasame", "Orcrist", "Sakabato", "Samehada", "Wadô Ichimonji", "Zanpakutō"]
-    let newAttackPoint = Int.random(in:0..<100)
-    attacker.weapon = weapons.randomElement()!
-    attacker.attack = newAttackPoint
+// 7. Ready to fight
+func chooseWhoStartFirst() -> Player {
+    let lotery = Int.random(in:1...2) == 1 ? playerOne : playerTwo
+    return lotery
 }
 
-//presentMenu()
+// 8. Add a weapon lotery possibility
+func loteryChest(attacker: Character){
+    let numbersOfFighters = 3
+    let lucky = 3
+    let chanceToWin = Int.random(in: 0...numbersOfFighters)
+    
+    if lucky == chanceToWin {
+        let objects = ["Magic Fire Sword", "Magic Thunder Spear", "Mjöllnir", "Gungnir", "Caducée", "Trisula", "Vajra", "Balizarde", "Andúril", "Alastor", "Aubéclat", "Bakuzan", "Dard", "Dragon Slayer", "Dimension Sword", "Excalibur", "Glace", "Masamuné", "Master Sword", "Murasame", "Orcrist", "Sakabato", "Samehada", "Wadô Ichimonji", "Zanpakutō", "Potion 30 Health", "Potion 40 Health", "Potion 50 Health", "Potion 60 Health", "Potion 70 Health", "Potion 80 Health", "Potion 90 Health", "Potion 100 Health", "Potion 150 Health"]
+        let newAttackPoint = Int.random(in:0...100)
+        attacker.weapon = objects.randomElement()!
+        attacker.attack = newAttackPoint
+    }
+}
 
+// 9. Battle start
+func battleStart(){
+    let firstPlayer = chooseWhoStartFirst().name
+    
+    
+    if firstPlayer == playerOne.name {
+        // Let player One select a fighter and the target in playerTwo team
+        //This statement have to repeat until all fighters of any team are dead
+        //this can be a function because I will use it for the second player
+        
+        
+    } else if firstPlayer == playerTwo.name{
+        // Same has playerOne above
+    }
+    
+}
+
+// 10. Fight !
+func fight(teamOne: [Character], teamTwo: [Character]){
+    
+    
+}
+
+presentMenu()

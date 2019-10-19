@@ -52,6 +52,9 @@ enum Messages: String {
     
     """
     case askForRenameFighter = """
+    Now you have 3 fighters in your team,
+    you can give them a new name if you want
+    
     Do you want to rename your figthers? yes/no
     
     """

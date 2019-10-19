@@ -22,12 +22,6 @@ class Player {
         self.name = name
     }
     
-    // Methods
-    
-    // Player choose fighters
-    func playerChooseFighters(fighters: Character){
-        self.fighters.append(fighters)
-    }
 }
 
 // Maybe I will extend character class with different children
@@ -83,7 +77,7 @@ class Character {
     
     // Character heals teammate
     func healTeammate(target: Character){
-        let healingPotion = 30 // Will be better to add healing potion in the lotery chest with different value 
+        let healingPotion = 50 // Will be better to add healing potion in the lotery chest with different value
         print("\(name) gives \(target.name) healing potion.")
         target.health += healingPotion
         print("\(target.name) got \(healingPotion) health points.")
