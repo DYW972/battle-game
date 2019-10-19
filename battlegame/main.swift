@@ -263,4 +263,4 @@ func weaponChest(attacker: Character){
 }
 
 //presentMenu()
-print(Messages.askForRenameFighter.rawValue)
+
