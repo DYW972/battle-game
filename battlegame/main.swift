@@ -251,9 +251,10 @@ func renameFighter(fighter: Character, player: Player){
 }
 
 // 7. Ready to fight
-func chooseWhoStartFirst() -> Player {
-    let lotery = Int.random(in:1...2) == 1 ? playerOne : playerTwo
-    return lotery
+func chooseWhoStartFirst() -> (Player, Player) {
+    let first = Int.random(in:1...2) == 1 ? playerOne : playerTwo
+    let second = Int.random(in:1...2) == 2 ? playerTwo : playerOne
+    return (first, second)
 }
 
 // 8. Add a weapon lotery possibility
@@ -264,7 +265,7 @@ func loteryChest(attacker: Character){
     
     if lucky == chanceToWin {
         let objects = ["Magic Fire Sword", "Magic Thunder Spear", "Mjöllnir", "Gungnir", "Caducée", "Trisula", "Vajra", "Balizarde", "Andúril", "Alastor", "Aubéclat", "Bakuzan", "Dard", "Dragon Slayer", "Dimension Sword", "Excalibur", "Glace", "Masamuné", "Master Sword", "Murasame", "Orcrist", "Sakabato", "Samehada", "Wadô Ichimonji", "Zanpakutō", "Potion 30 Health", "Potion 40 Health", "Potion 50 Health", "Potion 60 Health", "Potion 70 Health", "Potion 80 Health", "Potion 90 Health", "Potion 100 Health", "Potion 150 Health"]
-        let newAttackPoint = Int.random(in:0...100)
+        let newAttackPoint = Int.random(in:40...100)
         attacker.weapon = objects.randomElement()!
         attacker.attack = newAttackPoint
     }
@@ -272,25 +273,109 @@ func loteryChest(attacker: Character){
 
 // 9. Battle start
 func battleStart(){
-    let firstPlayer = chooseWhoStartFirst().name
     
+    let firstPlayer = chooseWhoStartFirst().0.name
+    let secondPlayer = chooseWhoStartFirst().1.name
     
-    if firstPlayer == playerOne.name {
-        // Let player One select a fighter and the target in playerTwo team
-        //This statement have to repeat until all fighters of any team are dead
-        //this can be a function because I will use it for the second player
+    let playerStart = firstPlayer == playerOne.name ? playerOne : playerTwo
+    let playerAfter = secondPlayer == playerTwo.name ? playerTwo : playerOne
         
-        
-    } else if firstPlayer == playerTwo.name{
-        // Same has playerOne above
+    fight(first: playerStart, second: playerAfter)
+}
+
+// 10. Fight !
+func fight(first: Player, second: Player){
+    var attacker = [Character]()
+    var target = [Character]()
+    
+    while first.fighters.count > 0 && second.fighters.count > 0 {
+        // First player attacks the second player
+        print("\(first.name) select a fighter")
+        // Let player choose a fighter
+        // Display player team
+        for (index, fighter) in (first.fighters.enumerated()){
+            print("\n\(index+1). \(fighter.name)     ❤️  :\(fighter.health)    💥:\(fighter.attack)    ⚔️  :\(fighter.weapon)")
+        }
+        if let choice = readLine() {
+            switch choice {
+            case "1":
+                attacker.append(first.fighters[0])
+            case "2":
+                attacker.append(first.fighters[1])
+            case "3":
+                attacker.append(first.fighters[2])
+            default:
+                print("You can only use numbers 1,2 or 3 for choosing a fighter")
+            }
+        }
+        // Let playerStrat select a enemy to attack
+        print("\(first.name) select a enemy to attack")
+        for (index, fighter) in second.fighters.enumerated() {
+            print("\n\(index+1). \(fighter.name)     ❤️  :\(fighter.health)    💥:\(fighter.attack)    ⚔️  :\(fighter.weapon)")
+        }
+        if let choice = readLine() {
+            switch choice {
+            case "1":
+                target.append(second.fighters[0])
+            case "2":
+                target.append(second.fighters[1])
+            case "3":
+                target.append(second.fighters[2])
+            default:
+                print("You can only use numbers 1,2 or 3 for choosing a target")
+            }
+        }
+        for fighter in attacker{
+            loteryChest(attacker: fighter)
+            fighter.attackOpponent(target: target[0])
+        }
+        attacker.removeAll()
+        target.removeAll()
+        // Second player attacks the second player
+        print("\(second.name) select a fighter")
+        for (index, fighter) in second.fighters.enumerated(){
+            print("\n\(index+1). \(fighter.name)     ❤️  :\(fighter.health)    💥:\(fighter.attack)    ⚔️  :\(fighter.weapon)")
+        }
+        if let choice = readLine() {
+            switch choice {
+            case "1":
+                attacker.append(second.fighters[0])
+            case "2":
+                attacker.append(second.fighters[1])
+            case "3":
+                attacker.append(second.fighters[2])
+            default:
+                print("You can only use numbers 1,2 or 3 for choosing a fighter")
+            }
+        }
+        // Let playerStrat select a enemy to attack
+        print("\(second.name) select a enemy to attack")
+        for (index, fighter) in first.fighters.enumerated() {
+            print("\n\(index+1). \(fighter.name)     ❤️  :\(fighter.health)    💥:\(fighter.attack)    ⚔️  :\(fighter.weapon)")
+        }
+        if let choice = readLine() {
+            switch choice {
+            case "1":
+                target.append(first.fighters[0])
+            case "2":
+                target.append(first.fighters[1])
+            case "3":
+                target.append(first.fighters[2])
+            default:
+                print("You can only use numbers 1,2 or 3 for choosing a target")
+            }
+        }
+        for fighter in attacker{
+            loteryChest(attacker: fighter)
+            fighter.attackOpponent(target: target[0])
+        }
+        attacker.removeAll()
+        target.removeAll()
     }
     
 }
 
-// 10. Fight !
-func fight(teamOne: [Character], teamTwo: [Character]){
-    
-    
-}
+
+
 
 presentMenu()
