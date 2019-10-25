@@ -7,18 +7,6 @@
 //
 
 import Foundation
-// Characters
-enum Characters: String {
-    case Thanos
-    case Odin
-    case Zeus
-    case Athena
-    case Hera
-    case Valkyrie
-    case Groot
-    case StarLord
-    case Marvel
-}
 
 // Messages
 enum Messages: String {
@@ -28,15 +16,23 @@ enum Messages: String {
     == Welcome in Battle Game ==
     ============================
     
+    1v1 fight game :
+    - Choose 3 fighters
+    - Attack or Heal
+    - Kill them all = Win
+    
+    Ready to fight ?
+    
     """
     case chooseYourSide = """
     
-    Choose your side:
+    Make your choice :
     1. Player One
     2. Player Two
-    
+    3. See Hall Of Famous
     """
     case choosePlayerOne = """
+    
     Player Two is ready to fight.
     Let Player One prepare for fight.
     
@@ -75,6 +71,12 @@ enum Messages: String {
     What's the new name of this fighter ?
     
     """
+    case nameAlreadyExists = """
+    
+    This name already exists in your team.
+    Please give a unique name.
+    
+    """
     case finish = """
     
     Finish ?  Type: yes
@@ -97,28 +99,10 @@ enum Messages: String {
     
     
     """
-    
-}
+    case fight = """
 
-enum ErrorMessage: String {
-    case chooseYourSide = """
-    
-    You can only use numbers 1 or 2 to choose your side.
-    
-    """
-    case chooseFighters = """
-    
-    You can only use numbers 1 to 9 for choosing a fighter.
-    
-    """
-    case chooseFighterToRename = """
-    
-    You can only use numbers 1, 2 or 3 to rename a fighter.
-    
-    """
-    case yesOrNoToRename = """
-    
-    You can only type yes or no to decide if you want or not rename a fighter.
-    
+    Get ready...
+    Fight !
+
     """
 }

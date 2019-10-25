@@ -7,32 +7,12 @@
 //
 import Foundation
 
-// Player Class
-class Player {
-    
-    // Properties
-    
-    var name: String
-    var fighters = [Character]()
-    var score = 0
-    var isWinner = false
-    
-    // Initializer
-    init(name:String){
-        self.name = name
-    }
-    
-}
-
-// Maybe I will extend character class with different children
-
-// Characters class
 class Character {
-    
-    // Properties
+    // MARK: Properties
     var name: String
     var health = 200
     var attack = 30
+    var isDead = false
     var weapon = "Basic Sword" {
         willSet {
             print("\(name) has a chance to gain a new weapon !")
@@ -42,14 +22,12 @@ class Character {
             print("\(name) got \(weapon) as new weapon !")
         }
     }
-    var isDead = false
-    
     //Initializer
     init(name:String){
         self.name = name
     }
     
-    // Methods
+    // MARK: Methods
     
     // Rename character
     func renameCharacter(with newName: String){
@@ -82,10 +60,4 @@ class Character {
         target.health += healingPotion
         print("\(target.name) got \(healingPotion) health points.")
     }
-    
-    // Describe the character after attack
-    func describe(){
-        print("\(name) have \(health) life points, \(attack) attack point(s) and \(weapon) as weapon")
-    }
-    
 }
