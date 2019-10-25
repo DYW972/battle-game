@@ -39,8 +39,10 @@ class Game {
                 case "3":
                     if hallOfFamous.count > 0 {
                         showHallOfFame()
+                        presentMenu()
                     } else {
                         print("""
+
                             Hall of Fame still empty...
                             Fight for your name here !
 
@@ -204,11 +206,7 @@ class Game {
         if let choice = readLine(), let choiceInt = Int(choice) {
             switch choice {
             case "1":
-                let attackerIndex = choiceInt - 1
-                let targetIndex =  selectTarget(first: first, second: second)
-                let targetEnemy = second.fighters[targetIndex]
-                loteryChest(attacker: first.fighters[attackerIndex])
-                first.fighters[attackerIndex].attackOpponent(target: targetEnemy)
+                handleTarget(firstPlayer: first, secondPlayer: second, attackerIndex: choiceInt - 1)
             case "2":
                 let attackerIndex = choiceInt - 1
                 let targetIndex =  selectTarget(first: first, second: second)
@@ -255,16 +253,25 @@ class Game {
         return target
     }
     
-    /// Fight
+    /// Handle target
+    func handleTarget(firstPlayer:Player, secondPlayer:Player, attackerIndex: Int){
+        let targetIndex =  selectTarget(first: firstPlayer, second: secondPlayer)
+        let targetEnemy = secondPlayer.fighters[targetIndex]
+        loteryChest(attacker: firstPlayer.fighters[attackerIndex])
+        firstPlayer.fighters[attackerIndex].attackOpponent(target: targetEnemy)
+    }
+    
+    /// Main Fight Method
     func fight(first: Player, second: Player){
         print(Messages.fight.rawValue)
         while true {
+            // Player One Round
             selectAttacker(first: first, second: second)
             winner(first: first, second: second)
+            // Player Two Round
             selectAttacker(first: second, second: first)
             winner(first: first, second: second)
         }
-        
     }
     
     /// Check if winner
@@ -294,7 +301,9 @@ class Game {
     /// Display Hall Of Fame
     func showHallOfFame(){
         for (winner,fighters) in hallOfFamous {
-            print(winner)
+            print("""
+                \(winner)
+                """)
             for (index, fighter) in fighters.enumerated(){
                 print("""
                     \(index+1). \(fighter.name)     ❤️  :\(fighter.health)    💥:\(fighter.attack)    ⚔️  :\(fighter.weapon)
