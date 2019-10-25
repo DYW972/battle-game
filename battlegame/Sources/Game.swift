@@ -10,6 +10,7 @@ import Foundation
 
 class Game {
     // MARK: PROPERTIES
+    
     var playerOne: Player
     var playerTwo: Player
     let fighters = ["Thanos","Odin","Zeus","Athena","Hera","Valkyrie","Groot","StarLord","Marvel"]
@@ -70,7 +71,7 @@ class Game {
         }
     }
     
-    /// Let player add his name
+    /// Let player add name
     func renamePlayer(player: Player){
         print(Messages.whatIsYourName.rawValue)
         if let newName = readLine(){
@@ -82,7 +83,7 @@ class Game {
         }
     }
     
-    /// Player select fighters menu
+    /// Player select fighters
     func chooseFighters(player: Player){
         while player.fighters.count < 3 {
             print(Messages.chooseFighter.rawValue)
@@ -120,7 +121,7 @@ class Game {
         return message
     }
     
-    /// Ask player for renaming fighters.
+    /// Rename fighters
     func askForRenaming(player: Player){
         print(Messages.askForRenameFighter.rawValue)
         if let choice = readLine(){
@@ -178,7 +179,7 @@ class Game {
         selectFighterToRename(player: player)
     }
     
-    /// Add an object lotery
+    /// Weapons lotery
     func loteryChest(attacker: Character){
         let numbersOfFighters = 3
         let lucky = 1
@@ -208,17 +209,9 @@ class Game {
             case "1":
                 handleTarget(firstPlayer: first, secondPlayer: second, attackerIndex: choiceInt - 1)
             case "2":
-                let attackerIndex = choiceInt - 1
-                let targetIndex =  selectTarget(first: first, second: second)
-                let targetEnemy = second.fighters[targetIndex]
-                loteryChest(attacker: first.fighters[attackerIndex])
-                first.fighters[attackerIndex].attackOpponent(target: targetEnemy)
+                handleTarget(firstPlayer: first, secondPlayer: second, attackerIndex: choiceInt - 1)
             case "3":
-                let attackerIndex = choiceInt - 1
-                let targetIndex =  selectTarget(first: first, second: second)
-                let targetEnemy = second.fighters[targetIndex]
-                loteryChest(attacker: first.fighters[attackerIndex])
-                first.fighters[attackerIndex].attackOpponent(target: targetEnemy)
+                handleTarget(firstPlayer: first, secondPlayer: second, attackerIndex: choiceInt - 1)
             default:
                 print("You can only use numbers 1,2 or 3 for choosing a fighter")
                 selectAttacker(first: first, second: second)
@@ -302,7 +295,7 @@ class Game {
     func showHallOfFame(){
         for (winner,fighters) in hallOfFamous {
             print("""
-                \(winner)
+                \(winner) :
                 """)
             for (index, fighter) in fighters.enumerated(){
                 print("""
