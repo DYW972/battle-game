@@ -29,7 +29,6 @@ enum Messages: String {
     Make your choice :
     1. Player One
     2. Player Two
-    3. See Hall Of Famous
     """
     case choosePlayerOne = """
     
@@ -104,5 +103,11 @@ enum Messages: String {
     Get ready...
     Fight !
 
+    """
+    case selectedFighterMenu = """
+    
+    1. Attack
+    2. Heal
+    
     """
 }

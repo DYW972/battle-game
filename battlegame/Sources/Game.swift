@@ -14,7 +14,6 @@ class Game {
     var playerOne: Player
     var playerTwo: Player
     let fighters = ["Thanos","Odin","Zeus","Athena","Hera","Valkyrie","Groot","StarLord","Marvel"]
-    var hallOfFamous = [String : [Character]]()
     
     // MARK: INITIALIZER
     
@@ -37,19 +36,6 @@ class Game {
                     renamePlayer(player: playerOne)
                 case "2":
                     renamePlayer(player: playerTwo)
-                case "3":
-                    if hallOfFamous.count > 0 {
-                        showHallOfFame()
-                        presentMenu()
-                    } else {
-                        print("""
-
-                            Hall of Fame still empty...
-                            Fight for your name here !
-
-                            """)
-                        presentMenu()
-                    }
                 default:
                     print(ErrorMessage.chooseYourSide.rawValue)
                     presentMenu()
@@ -71,7 +57,7 @@ class Game {
         }
     }
     
-    /// Let player add name
+    /// Let player add a name
     func renamePlayer(player: Player){
         print(Messages.whatIsYourName.rawValue)
         if let newName = readLine(){
@@ -113,7 +99,7 @@ class Game {
         """
         for fighter in player.fighters{
             message += """
-            \(fighter.name)     ❤️  :\(fighter.health)    💥:\(fighter.attack)    ⚔️  :\(fighter.weapon)
+            \(fighter.name)     ❤️  :\(fighter.health)    💥:\(fighter.attack)    ⚔️  :\(fighter.weapon)    🧪:\(fighter.potion)
             
             
             """
@@ -179,42 +165,92 @@ class Game {
         selectFighterToRename(player: player)
     }
     
-    /// Weapons lotery
-    func loteryChest(attacker: Character){
-        let numbersOfFighters = 3
-        let lucky = 1
-        let chanceToWin = Int.random(in: 1...numbersOfFighters)
-        if lucky == chanceToWin {
-            let objects = ["Magic Fire Sword", "Magic Thunder Spear", "Mjöllnir", "Gungnir", "Caducée", "Trisula", "Vajra", "Balizarde", "Andúril", "Alastor", "Aubéclat", "Bakuzan", "Dard", "Dragon Slayer", "Dimension Sword", "Excalibur", "Glace", "Masamuné", "Master Sword", "Murasame", "Orcrist", "Sakabato", "Samehada", "Wadô Ichimonji", "Zanpakutō"]
-            let newAttackPoint = Int.random(in:50...100)
-            // ADD ONLY ONE POTION
-            //            let healingPotions = ["Potion": 30, "Potion": 40, "Potion": 50, "Potion": 60, "Potion": 70, "Potion": 80, "Potion": 90, "Potion": 100, "Potion": 150]
-            attacker.weapon = objects.randomElement()!
-            attacker.attack = newAttackPoint
-        }
-    }
-    
     /// Select attacker
     func selectAttacker(first: Player, second:Player){
         print("""
             
-            \(first.name) select a fighter
+            \(first.name) Select a fighter :
             
             """)
         for (index, fighter) in (first.fighters.enumerated()){
-            print("\n\(index+1). \(fighter.name)     ❤️  :\(fighter.health)    💥:\(fighter.attack)    ⚔️  :\(fighter.weapon)")
+            if fighter.isDead == false {
+                 print("\n\(index+1). \(fighter.name)     ❤️  :\(fighter.health)    💥:\(fighter.attack)    ⚔️  :\(fighter.weapon)    🧪:\(fighter.potion)")
+            }
         }
         if let choice = readLine(), let choiceInt = Int(choice) {
             switch choice {
             case "1":
-                handleTarget(firstPlayer: first, secondPlayer: second, attackerIndex: choiceInt - 1)
+                selectedFighterMenu(firstPlayer:first, secondPlayer:second, attacker: choiceInt - 1)
             case "2":
-                handleTarget(firstPlayer: first, secondPlayer: second, attackerIndex: choiceInt - 1)
+                selectedFighterMenu(firstPlayer:first, secondPlayer:second, attacker: choiceInt - 1)
             case "3":
-                handleTarget(firstPlayer: first, secondPlayer: second, attackerIndex: choiceInt - 1)
+                selectedFighterMenu(firstPlayer:first, secondPlayer:second, attacker: choiceInt - 1)
             default:
                 print("You can only use numbers 1,2 or 3 for choosing a fighter")
                 selectAttacker(first: first, second: second)
+            }
+            
+        }
+    }
+    
+    /// Selected fighter menu
+    func selectedFighterMenu(firstPlayer:Player, secondPlayer:Player, attacker: Int){
+        print("""
+            
+            Select an option :
+            
+            """)
+        print(Messages.selectedFighterMenu.rawValue)
+        if let choice = readLine(){
+            switch choice {
+            case "1":
+                // Attack menu
+                handleTarget(firstPlayer: firstPlayer, secondPlayer: secondPlayer, attackerIndex: attacker)
+            case "2":
+                //Select menu for healing
+                selectFighterToHeal(firstPlayer: firstPlayer, secondPlayer: secondPlayer, fighterIndex: attacker)
+            default:
+                selectedFighterMenu(firstPlayer:firstPlayer, secondPlayer:secondPlayer, attacker: attacker)
+            }
+        }
+    }
+    
+    /// Select fighter to heal menu:
+    func selectFighterToHeal(firstPlayer: Player, secondPlayer: Player, fighterIndex: Int){
+        print("""
+            
+            Select a fighter to heal :
+            
+            """)
+        for (index, fighter) in (firstPlayer.fighters.enumerated()){
+            if fighter.isDead == false {
+                print("\n\(index+1). \(fighter.name)     ❤️  :\(fighter.health)    💥:\(fighter.attack)    ⚔️  :\(fighter.weapon)    🧪:\(fighter.potion)")
+            }
+        }
+        print("4. Back to selected fighter menu")
+        if let choice = readLine(), let choiceInt = Int(choice) {
+            switch choice {
+            case "1":
+            // select first fighter
+                
+                if firstPlayer.fighters[fighterIndex].healTeammate(target: firstPlayer.fighters[choiceInt - 1]) == false {
+                    selectedFighterMenu(firstPlayer:firstPlayer, secondPlayer:secondPlayer, attacker: fighterIndex)
+                }
+            case "2":
+            // select second fighter
+                if  firstPlayer.fighters[fighterIndex].healTeammate(target: firstPlayer.fighters[choiceInt - 1]) == false {
+                    selectedFighterMenu(firstPlayer:firstPlayer, secondPlayer:secondPlayer, attacker: fighterIndex)
+                }
+            case "3":
+            // select third fighter
+                if  firstPlayer.fighters[fighterIndex].healTeammate(target: firstPlayer.fighters[choiceInt - 1]) == false {
+                    selectedFighterMenu(firstPlayer:firstPlayer, secondPlayer:secondPlayer, attacker: fighterIndex)
+                }
+            case "4":
+                // back to select fighter menu
+                selectedFighterMenu(firstPlayer:firstPlayer, secondPlayer:secondPlayer, attacker: fighterIndex)
+            default :
+                selectFighterToHeal(firstPlayer: firstPlayer,secondPlayer:secondPlayer, fighterIndex: fighterIndex)
             }
         }
     }
@@ -228,7 +264,9 @@ class Game {
             
             """)
         for (index, fighter) in second.fighters.enumerated() {
-            print("\n\(index+1). \(fighter.name)     ❤️  :\(fighter.health)    💥:\(fighter.attack)    ⚔️  :\(fighter.weapon)")
+            if fighter.isDead == false {
+                print("\n\(index+1). \(fighter.name)     ❤️  :\(fighter.health)    💥:\(fighter.attack)    ⚔️  :\(fighter.weapon)    🧪:\(fighter.potion)")
+            }
         }
         if let choice = readLine(), let choiceInt = Int(choice) {
             switch choice {
@@ -254,6 +292,25 @@ class Game {
         firstPlayer.fighters[attackerIndex].attackOpponent(target: targetEnemy)
     }
     
+    /// Magic objects lotery
+    func loteryChest(attacker: Character){
+        let aNewWeapon = 1
+        let aMagicPotion = 5
+        let chanceToWin = Int.random(in: 1...10)
+        if aNewWeapon == chanceToWin {
+            if let randomWeapon = WeaponType(rawValue: Int.random(in:1...5)) {
+                let newWeapon = Weapon(name: randomWeapon.name, damages: randomWeapon.damages)
+                attacker.weapon = newWeapon.name
+                attacker.attack = newWeapon.damages
+            }
+        } else if aMagicPotion == chanceToWin {
+            if let randomPotion = MagicPotionType(rawValue: Int.random(in:1...3)) {
+                attacker.potion = randomPotion.name
+                attacker.healingPoints = randomPotion.points
+            }
+        }
+    }
+    
     /// Main Fight Method
     func fight(first: Player, second: Player){
         print(Messages.fight.rawValue)
@@ -276,35 +333,22 @@ class Game {
         }
     }
     
-    /// Add winner to Hall Of Fame
+    /// Display Winner
     func hallOfFame(winner: Player) {
-        print("\(winner.name) win the battle !")
+        print("""
+            
+            
+            
+            \(winner.name) win the battle !
+            """)
         for (index, fighter) in winner.fighters.enumerated() {
             print("""
-                \(index+1). \(fighter.name)     ❤️  :\(fighter.health)    💥:\(fighter.attack)    ⚔️  :\(fighter.weapon)
+                \(index+1). \(fighter.name)     ❤️  :\(fighter.health)    💥:\(fighter.attack)    ⚔️  :\(fighter.weapon)    🧪:\(fighter.potion)
                 
                 """)
         }
-        hallOfFamous[winner.name] = winner.fighters
         playerOne.fighters.removeAll()
         playerTwo.fighters.removeAll()
         presentMenu()
     }
-    
-    /// Display Hall Of Fame
-    func showHallOfFame(){
-        for (winner,fighters) in hallOfFamous {
-            print("""
-                \(winner) :
-                """)
-            for (index, fighter) in fighters.enumerated(){
-                print("""
-                    \(index+1). \(fighter.name)     ❤️  :\(fighter.health)    💥:\(fighter.attack)    ⚔️  :\(fighter.weapon)
-                    
-                    """)
-            }
-            print("=========================================")
-        }
-    }
-    
 }

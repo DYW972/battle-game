@@ -16,3 +16,4 @@ var newGame = Game(playerOne: playerOne, playerTwo: playerTwo)
 
 // MARK: START THE GAME
 newGame.presentMenu()
+
