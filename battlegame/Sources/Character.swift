@@ -14,36 +14,43 @@ class Character {
     var attack = 30
     var healingPoints = 0
     var isDead = false
-    var weapon = "Basic Sword" {
+    var weapon = String() {
         willSet {
             print("\(name) has a chance to gain a new weapon !")
         }
         
         didSet {
-            print("\(name) got \(weapon) as new weapon !")
+            print("""
+                
+                \(name) is lucky ! A magic chest appears and give \(name) a chance to get a magic object !
+                What's inside ... ?!
+                Oh! \(name) got \(weapon) as new weapon !
+                
+                """)
         }
     }
     var potion = "0"{
-        
-        willSet{
-            if potion == "0" {
-                print("\(name) have no more potion !")
-            } else {
-                print("\(name) has a chance to gain a healing potion!")
-            }
-        }
         didSet {
             if potion == "0" {
-                 print("\(name) have 0 potion !")
+                print("\(name) have 0 potion !")
             } else {
-                print("\(name) got \(potion) !")
+                print("""
+                    
+                    \(name) is lucky ! A magic chest appears and give \(name) a chance to get a magic object !
+                    What's inside ... ?!
+                    Oh! \(name) got \(potion) has new magic potion !
+                    
+                    """)
             }
         }
-        
     }
+    
     //Initializer
     init(name:String){
         self.name = name
+        let basicWeapon = Weapon.init(name: "Basic Sword", damages: 30)
+        self.attack = basicWeapon.damages
+        self.weapon = basicWeapon.name
     }
     
     // MARK: Methods
@@ -85,16 +92,41 @@ class Character {
             print("Sorry but \(target.name) have max health and can't be heal.")
             status = false
         } else if healingPoints == 0 {
-            print("Sorry but \(self.name) don't have a magic potion for healing \(target.name)!")
+            if target.name == name {
+                print("""
+                    
+                    Sorry but \(name) don't have a magic potion
+                    
+                    """)
+            }else{
+                print("""
+                    
+                    Sorry but \(name) don't have a magic potion for healing \(target.name)!
+                    
+                    """)
+            }
             status = false 
         }else {
             let healingPointsLimit = 200 - target.health
             if healingPoints > healingPointsLimit {
                 healingPoints = healingPointsLimit
             }
-            print("\(name) gives \(target.name) \(healingPoints) health points.")
             target.health += healingPoints
-            print("\(target.name) have now : \(target.health) health points.")
+            if target.name == name {
+                print("""
+                    
+                    \(name) took \(potion) and got \(healingPoints) health points.
+                    \(name) have now \(health) health points.
+                    
+                    """)
+            }else{
+                print("""
+                    
+                    \(name) gives \(target.name) \(healingPoints) health points.
+                    \(target.name) have now : \(target.health) health points.
+                    
+                    """)
+            }
             healingPoints = 0
             potion = "0"
             status = true
