@@ -38,4 +38,24 @@ enum ErrorMessage: String {
     Remember, you can only give your fighters unique name.
     
     """
+    case selectFighterMenu = """
+    
+    You can only use numbers 1 or 2 in fighter's menu.
+    
+    """
+    case selectFighterForAttack = """
+    
+    You can only use numbers 1,2 or 3 for choosing a fighter.
+    
+    """
+    case selectFighterToHeal = """
+    
+    You can only use numbers 1,2,3 for choosing a target and 4 for leaving.
+    
+    """
+    case selectTargetToAttack = """
+    
+    You can only use numbers 1,2 or 3 for choosing a target.
+    
+    """
 }
