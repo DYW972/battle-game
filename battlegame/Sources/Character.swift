@@ -23,7 +23,7 @@ class Character {
                 
                 \(name) is lucky ! A magic chest appears and give \(name) a chance to get a magic object !
                 What's inside ... ?!
-                Oh! \(name) got \(weapon) as new weapon !
+                Oh! \(name) got \(weapon.name) as new weapon !
                 
                 """)
         }
