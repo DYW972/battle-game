@@ -11,10 +11,9 @@ class Character {
     // MARK: Properties
     var name: String
     var health = 200
-    var attack = 30
     var healingPoints = 0
     var isDead = false
-    var weapon = String() {
+    var weapon: Weapon {
         willSet {
             print("\(name) has a chance to gain a new weapon !")
         }
@@ -49,8 +48,7 @@ class Character {
     init(name:String){
         self.name = name
         let basicWeapon = Weapon.init(name: "Basic Sword", damages: 30)
-        self.attack = basicWeapon.damages
-        self.weapon = basicWeapon.name
+        self.weapon = basicWeapon
     }
     
     // MARK: Methods
@@ -66,9 +64,8 @@ class Character {
             print("\(name) has no life point and cannot attack !")
         } else {
             if health > 0 {
-                let damages = attack
-                print("\(name) inflicts \(target.name) \(damages) damage points")
-                target.health -= damages
+                print("\(name) inflicts \(target.name) \(weapon.damages) damage points")
+                target.health -= weapon.damages
                 if target.health > 0 {
                     print("\(target.name) still have \(target.health) life points.")
                 } else {
