@@ -78,7 +78,7 @@ enum Messages: String {
     """
     case finish = """
     
-    Finish ?  Type: yes
+    4. yes
     
     """
     case renamingTerminated = """
@@ -99,10 +99,10 @@ enum Messages: String {
     
     """
     case fight = """
-
+    
     Get ready...
     Fight !
-
+    
     """
     case selectedFighterMenu = """
     
