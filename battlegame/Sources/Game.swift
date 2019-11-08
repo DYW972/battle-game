@@ -30,16 +30,15 @@ class Game {
         switch true {
         case playerOne.fighters.count == 0  && playerTwo.fighters.count == 0 :
             print(Messages.chooseYourSide.rawValue)
-            if let choice = readLine(){
-                switch choice {
-                case "1":
-                    renamePlayer(player: playerOne)
-                case "2":
-                    renamePlayer(player: playerTwo)
-                default:
-                    print(ErrorMessage.chooseYourSide.rawValue)
-                    presentMenu()
-                }
+            guard let choice = readLine() else {return}
+            switch choice {
+            case "1":
+                renamePlayer(player: playerOne)
+            case "2":
+                renamePlayer(player: playerTwo)
+            default:
+                print(ErrorMessage.chooseYourSide.rawValue)
+                presentMenu()
             }
         case playerOne.fighters.count == 0:
             print(Messages.choosePlayerOne.rawValue)
@@ -60,13 +59,12 @@ class Game {
     /// Let player add a name
     func renamePlayer(player: Player){
         print(Messages.whatIsYourName.rawValue)
-        if let newName = readLine(){
-            player.name = newName
-            print("\n"
-                + "\nWelcome \(player.name)"
-                + "\n")
-            chooseFighters(player: player)
-        }
+        guard let newName = readLine() else {return}
+        player.name = newName
+        print("\n"
+            + "\nWelcome \(player.name)"
+            + "\n")
+        chooseFighters(player: player)
     }
     
     /// Player select fighters
@@ -77,15 +75,16 @@ class Game {
                 print("\(index+1).\(fighter)")
             }
             print("\nType fighter number :")
-            if let choice = readLine(), let choiceInt = Int(choice), let fighter = FighterType(rawValue: choiceInt)  {
-                player.fighters.append(Character(name: fighter.name))
-                print("\n"
-                    + "\nThere is \(player.fighters.count) figthers in your team:")
-                for fighter in player.fighters{
-                    print("\n\(fighter.name)")
-                }
-            } else {
+            guard let choice = readLine(), let choiceInt = Int(choice), let fighter = FighterType(rawValue: choiceInt) else{
+                print(ErrorMessage.chooseFighters.rawValue)
                 chooseFighters(player: player)
+                return
+            }
+            player.fighters.append(Character(name: fighter.name))
+            print("\n"
+                + "\nThere is \(player.fighters.count) figthers in your team:")
+            for fighter in player.fighters{
+                print("\n\(fighter.name)")
             }
         }
         askForRenaming(player: player)
@@ -99,7 +98,7 @@ class Game {
         """
         for fighter in player.fighters{
             message += """
-            \(fighter.name)     ❤️  :\(fighter.health)    💥:\(fighter.attack)    ⚔️  :\(fighter.weapon)    🧪:\(fighter.potion)
+            \(fighter.name)     ❤️  :\(fighter.health)    💥:\(fighter.weapon.damages)    ⚔️  :\(fighter.weapon)    🧪:\(fighter.potion)
             
             
             """
@@ -110,18 +109,17 @@ class Game {
     /// Rename fighters
     func askForRenaming(player: Player){
         print(Messages.askForRenameFighter.rawValue)
-        if let choice = readLine(){
-            switch choice.lowercased() {
-            case "yes":
-                selectFighterToRename(player: player)
-            case "no":
-                print(Messages.noRenaming.rawValue)
-                print(showPlayerTeam(player: player))
-                presentMenu()
-            default:
-                print(ErrorMessage.yesOrNoToRename.rawValue)
-                askForRenaming(player: player)
-            }
+        guard let choice = readLine() else {return}
+        switch choice.lowercased() {
+        case "yes":
+            selectFighterToRename(player: player)
+        case "no":
+            print(Messages.noRenaming.rawValue)
+            print(showPlayerTeam(player: player))
+            presentMenu()
+        default:
+            print(ErrorMessage.yesOrNoToRename.rawValue)
+            askForRenaming(player: player)
         }
     }
     
@@ -133,34 +131,28 @@ class Game {
                 + "\n")
         }
         print(Messages.finish.rawValue)
-        if let choice = readLine() {
-            switch choice {
-            case "1":
-                renameFighter(fighter: player.fighters[0], player: player)
-            case "2":
-                renameFighter(fighter: player.fighters[1], player: player)
-            case "3":
-                renameFighter(fighter: player.fighters[2], player: player)
-            case "yes":
-                print(Messages.renamingTerminated.rawValue)
-                print(showPlayerTeam(player: player))
-                presentMenu()
-            default :
-                print(ErrorMessage.chooseFighterToRename.rawValue)
-                selectFighterToRename(player: player)
-            }
+        guard let choice = readLine(), let choiceInt = Int(choice) else {return}
+        switch choiceInt {
+        case 1, 2, 3:
+            renameFighter(fighter: player.fighters[choiceInt-1], player: player)
+        case 4:
+            print(Messages.renamingTerminated.rawValue)
+            print(showPlayerTeam(player: player))
+            presentMenu()
+        default :
+            print(ErrorMessage.chooseFighterToRename.rawValue)
+            selectFighterToRename(player: player)
         }
     }
     
     /// Rename fighter
     func renameFighter(fighter: Character, player: Player){
         print(Messages.giveFighterNewName.rawValue)
-        if let newName = readLine() {
-            if player.fighters.contains(where:{$0.name == newName}){
-                print(Messages.nameAlreadyExists.rawValue)
-            } else {
-                fighter.name = newName
-            }
+        guard let newName = readLine() else {return}
+        if player.fighters.contains(where:{$0.name == newName}){
+            print(Messages.nameAlreadyExists.rawValue)
+        } else {
+            fighter.name = newName
         }
         selectFighterToRename(player: player)
     }
@@ -174,22 +166,16 @@ class Game {
             """)
         for (index, fighter) in (first.fighters.enumerated()){
             if fighter.isDead == false {
-                 print("\n\(index+1). \(fighter.name)     ❤️  :\(fighter.health)    💥:\(fighter.attack)    ⚔️  :\(fighter.weapon)    🧪:\(fighter.potion)")
+                print("\n\(index+1). \(fighter.name)     ❤️  :\(fighter.health)    💥:\(fighter.weapon.damages)    ⚔️  :\(fighter.weapon)    🧪:\(fighter.potion)")
             }
         }
-        if let choice = readLine(), let choiceInt = Int(choice) {
-            switch choice {
-            case "1":
-                selectedFighterMenu(firstPlayer:first, secondPlayer:second, attacker: choiceInt - 1)
-            case "2":
-                selectedFighterMenu(firstPlayer:first, secondPlayer:second, attacker: choiceInt - 1)
-            case "3":
-                selectedFighterMenu(firstPlayer:first, secondPlayer:second, attacker: choiceInt - 1)
-            default:
-                print("You can only use numbers 1,2 or 3 for choosing a fighter")
-                selectAttacker(first: first, second: second)
-            }
-            
+        guard let choice = readLine(), let choiceInt = Int(choice) else {return}
+        switch choiceInt {
+        case 1, 2, 3 :
+            selectedFighterMenu(firstPlayer:first, secondPlayer:second, attacker: choiceInt - 1)
+        default:
+            print(ErrorMessage.selectFighterForAttack.rawValue)
+            selectAttacker(first: first, second: second)
         }
     }
     
@@ -201,17 +187,17 @@ class Game {
             
             """)
         print(Messages.selectedFighterMenu.rawValue)
-        if let choice = readLine(){
-            switch choice {
-            case "1":
-                // Attack menu
-                handleTarget(firstPlayer: firstPlayer, secondPlayer: secondPlayer, attackerIndex: attacker)
-            case "2":
-                //Select menu for healing
-                selectFighterToHeal(firstPlayer: firstPlayer, secondPlayer: secondPlayer, fighterIndex: attacker)
-            default:
-                selectedFighterMenu(firstPlayer:firstPlayer, secondPlayer:secondPlayer, attacker: attacker)
-            }
+        guard let choice = readLine() else {return}
+        switch choice {
+        case "1":
+            // Attack menu
+            handleTarget(firstPlayer: firstPlayer, secondPlayer: secondPlayer, attackerIndex: attacker)
+        case "2":
+            //Select menu for healing
+            selectFighterToHeal(firstPlayer: firstPlayer, secondPlayer: secondPlayer, fighterIndex: attacker)
+        default:
+            print(ErrorMessage.selectFighterMenu.rawValue)
+            selectedFighterMenu(firstPlayer:firstPlayer, secondPlayer:secondPlayer, attacker: attacker)
         }
     }
     
@@ -224,39 +210,28 @@ class Game {
             """)
         for (index, fighter) in (firstPlayer.fighters.enumerated()){
             if fighter.isDead == false {
-                print("\n\(index+1). \(fighter.name)     ❤️  :\(fighter.health)    💥:\(fighter.attack)    ⚔️  :\(fighter.weapon)    🧪:\(fighter.potion)")
+                print("\n\(index+1). \(fighter.name)     ❤️  :\(fighter.health)    💥:\(fighter.weapon.damages)    ⚔️  :\(fighter.weapon)    🧪:\(fighter.potion)")
             }
         }
         print("4. Back to selected fighter menu")
-        if let choice = readLine(), let choiceInt = Int(choice) {
-            switch choice {
-            case "1":
+        guard let choice = readLine(), let choiceInt = Int(choice) else {return}
+        switch choiceInt {
+        case 1, 2, 3 :
             // select first fighter
-                
-                if firstPlayer.fighters[fighterIndex].healTeammate(target: firstPlayer.fighters[choiceInt - 1]) == false {
-                    selectedFighterMenu(firstPlayer:firstPlayer, secondPlayer:secondPlayer, attacker: fighterIndex)
-                }
-            case "2":
-            // select second fighter
-                if  firstPlayer.fighters[fighterIndex].healTeammate(target: firstPlayer.fighters[choiceInt - 1]) == false {
-                    selectedFighterMenu(firstPlayer:firstPlayer, secondPlayer:secondPlayer, attacker: fighterIndex)
-                }
-            case "3":
-            // select third fighter
-                if  firstPlayer.fighters[fighterIndex].healTeammate(target: firstPlayer.fighters[choiceInt - 1]) == false {
-                    selectedFighterMenu(firstPlayer:firstPlayer, secondPlayer:secondPlayer, attacker: fighterIndex)
-                }
-            case "4":
-                // back to select fighter menu
+            if firstPlayer.fighters[fighterIndex].healTeammate(target: firstPlayer.fighters[choiceInt - 1]) == false {
                 selectedFighterMenu(firstPlayer:firstPlayer, secondPlayer:secondPlayer, attacker: fighterIndex)
-            default :
-                selectFighterToHeal(firstPlayer: firstPlayer,secondPlayer:secondPlayer, fighterIndex: fighterIndex)
             }
+        case 4:
+            // back to select fighter menu
+            selectedFighterMenu(firstPlayer:firstPlayer, secondPlayer:secondPlayer, attacker: fighterIndex)
+        default :
+            print(ErrorMessage.selectFighterToHeal.rawValue)
+            selectFighterToHeal(firstPlayer: firstPlayer,secondPlayer:secondPlayer, fighterIndex: fighterIndex)
         }
     }
     
-    /// Select target
-    func selectTarget(first:Player,second:Player) -> Int {
+    /// Select target to attack
+    func selectTargetToAttack(first:Player,second:Player) -> Int {
         var target = Int()
         print("""
             
@@ -265,28 +240,23 @@ class Game {
             """)
         for (index, fighter) in second.fighters.enumerated() {
             if fighter.isDead == false {
-                print("\n\(index+1). \(fighter.name)     ❤️  :\(fighter.health)    💥:\(fighter.attack)    ⚔️  :\(fighter.weapon)    🧪:\(fighter.potion)")
+                print("\n\(index+1). \(fighter.name)     ❤️  :\(fighter.health)    💥:\(fighter.weapon.damages)    ⚔️  :\(fighter.weapon)    🧪:\(fighter.potion)")
             }
         }
-        if let choice = readLine(), let choiceInt = Int(choice) {
-            switch choice {
-            case "1" :
-                target = choiceInt - 1
-            case "2" :
-                target = choiceInt - 1
-            case "3" :
-                target = choiceInt - 1
-            default :
-                print("You can only use numbers 1,2 or 3 for choosing a target")
-                fight(first: first, second: second)
-            }
+        guard let choice = readLine(), let choiceInt = Int(choice) else {return 10}
+        switch choiceInt {
+        case 1, 2, 3 :
+            target = choiceInt - 1
+        default :
+            print(ErrorMessage.selectTargetToAttack.rawValue)
+            fight(first: first, second: second)
         }
         return target
     }
     
     /// Handle target
     func handleTarget(firstPlayer:Player, secondPlayer:Player, attackerIndex: Int){
-        let targetIndex =  selectTarget(first: firstPlayer, second: secondPlayer)
+        let targetIndex =  selectTargetToAttack(first: firstPlayer, second: secondPlayer)
         let targetEnemy = secondPlayer.fighters[targetIndex]
         loteryChest(attacker: firstPlayer.fighters[attackerIndex])
         firstPlayer.fighters[attackerIndex].attackOpponent(target: targetEnemy)
@@ -294,20 +264,14 @@ class Game {
     
     /// Magic objects lotery
     func loteryChest(attacker: Character){
-        let aNewWeapon = 1
-        let aMagicPotion = 5
-        let chanceToWin = Int.random(in: 1...10)
-        if aNewWeapon == chanceToWin {
-            if let randomWeapon = WeaponType(rawValue: Int.random(in:1...5)) {
-                let newWeapon = Weapon(name: randomWeapon.name, damages: randomWeapon.damages)
-                attacker.weapon = newWeapon.name
-                attacker.attack = newWeapon.damages
-            }
-        } else if aMagicPotion == chanceToWin {
-            if let randomPotion = MagicPotionType(rawValue: Int.random(in:1...3)) {
-                attacker.potion = randomPotion.name
-                attacker.healingPoints = randomPotion.points
-            }
+        if Int.random(in: 1...10) == 1 {
+            guard let randomWeapon = WeaponType(rawValue: Int.random(in:1...5)) else {return}
+            let newWeapon = Weapon(name: randomWeapon.name, damages: randomWeapon.damages)
+            attacker.weapon = newWeapon
+        } else if Int.random(in: 1...10) == 5 {
+            guard let randomPotion = MagicPotionType(rawValue: Int.random(in:1...3)) else {return}
+            attacker.potion = randomPotion.name
+            attacker.healingPoints = randomPotion.points
         }
     }
     
@@ -343,7 +307,7 @@ class Game {
             """)
         for (index, fighter) in winner.fighters.enumerated() {
             print("""
-                \(index+1). \(fighter.name)     ❤️  :\(fighter.health)    💥:\(fighter.attack)    ⚔️  :\(fighter.weapon)    🧪:\(fighter.potion)
+                \(index+1). \(fighter.name)     ❤️  :\(fighter.health)    💥:\(fighter.weapon.damages)    ⚔️  :\(fighter.weapon)    🧪:\(fighter.potion)
                 
                 """)
         }
