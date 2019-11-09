@@ -13,8 +13,6 @@ class Player {
     // MARK: Properties
     var name: String
     var fighters = [Character]()
-    var score = 0
-    var isWinner = false
     
     // MARK: Initializer
     init(name:String){
