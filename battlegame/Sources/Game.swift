@@ -258,12 +258,12 @@ class Game {
     func handleTarget(firstPlayer:Player, secondPlayer:Player, attackerIndex: Int){
         let targetIndex =  selectTargetToAttack(first: firstPlayer, second: secondPlayer)
         let targetEnemy = secondPlayer.fighters[targetIndex]
-        loteryChest(attacker: firstPlayer.fighters[attackerIndex])
+        lottery(attacker: firstPlayer.fighters[attackerIndex])
         firstPlayer.fighters[attackerIndex].attackOpponent(target: targetEnemy)
     }
     
-    /// Magic objects lotery
-    func loteryChest(attacker: Character){
+    /// Magic objects lottery
+    func lottery(attacker: Character){
         if Int.random(in: 1...10) == 1 {
             guard let randomWeapon = WeaponType(rawValue: Int.random(in:1...5)) else {return}
             let newWeapon = Weapon(name: randomWeapon.name, damages: randomWeapon.damages)
