@@ -98,7 +98,7 @@ class Game {
         """
         for fighter in player.fighters{
             message += """
-            \(fighter.name)     ❤️  :\(fighter.health)    💥:\(fighter.weapon.damages)    ⚔️  :\(fighter.weapon)    🧪:\(fighter.potion)
+            \(fighter.name)     ❤️  :\(fighter.health)    💥:\(fighter.weapon.damages)    ⚔️  :\(fighter.weapon.name)    🧪:\(fighter.potion)
             
             
             """
@@ -166,13 +166,18 @@ class Game {
             """)
         for (index, fighter) in (first.fighters.enumerated()){
             if fighter.isDead == false {
-                print("\n\(index+1). \(fighter.name)     ❤️  :\(fighter.health)    💥:\(fighter.weapon.damages)    ⚔️  :\(fighter.weapon)    🧪:\(fighter.potion)")
+                print("\n\(index+1). \(fighter.name)     ❤️  :\(fighter.health)    💥:\(fighter.weapon.damages)    ⚔️  :\(fighter.weapon.name)    🧪:\(fighter.potion)")
             }
         }
         guard let choice = readLine(), let choiceInt = Int(choice) else {return}
         switch choiceInt {
         case 1, 2, 3 :
-            selectedFighterMenu(firstPlayer:first, secondPlayer:second, attacker: choiceInt - 1)
+            if first.fighters[choiceInt - 1].isDead == false {
+                selectedFighterMenu(firstPlayer:first, secondPlayer:second, attacker: choiceInt - 1)
+            } else {
+                print("Sorry but \(first.fighters[choiceInt - 1].name) is dead and can't be called for fight !")
+                selectAttacker(first: first, second: second)
+            }
         default:
             print(ErrorMessage.selectFighterForAttack.rawValue)
             selectAttacker(first: first, second: second)
@@ -210,7 +215,7 @@ class Game {
             """)
         for (index, fighter) in (firstPlayer.fighters.enumerated()){
             if fighter.isDead == false {
-                print("\n\(index+1). \(fighter.name)     ❤️  :\(fighter.health)    💥:\(fighter.weapon.damages)    ⚔️  :\(fighter.weapon)    🧪:\(fighter.potion)")
+                print("\n\(index+1). \(fighter.name)     ❤️  :\(fighter.health)    💥:\(fighter.weapon.damages)    ⚔️  :\(fighter.weapon.name)    🧪:\(fighter.potion)")
             }
         }
         print("4. Back to selected fighter menu")
@@ -240,13 +245,18 @@ class Game {
             """)
         for (index, fighter) in second.fighters.enumerated() {
             if fighter.isDead == false {
-                print("\n\(index+1). \(fighter.name)     ❤️  :\(fighter.health)    💥:\(fighter.weapon.damages)    ⚔️  :\(fighter.weapon)    🧪:\(fighter.potion)")
+                print("\n\(index+1). \(fighter.name)     ❤️  :\(fighter.health)    💥:\(fighter.weapon.damages)    ⚔️  :\(fighter.weapon.name)    🧪:\(fighter.potion)")
             }
         }
         guard let choice = readLine(), let choiceInt = Int(choice) else {return 10}
         switch choiceInt {
         case 1, 2, 3 :
-            target = choiceInt - 1
+            if second.fighters[choiceInt - 1].isDead == false {
+                target = choiceInt - 1
+            } else {
+                print("Sorry but \(second.fighters[choiceInt - 1].name) is dead and can't be attacked !")
+                fight(first: first, second: second)
+            }
         default :
             print(ErrorMessage.selectTargetToAttack.rawValue)
             fight(first: first, second: second)
@@ -304,10 +314,11 @@ class Game {
             
             
             \(winner.name) win the battle !
+            
             """)
         for (index, fighter) in winner.fighters.enumerated() {
             print("""
-                \(index+1). \(fighter.name)     ❤️  :\(fighter.health)    💥:\(fighter.weapon.damages)    ⚔️  :\(fighter.weapon)    🧪:\(fighter.potion)
+                \(index+1). \(fighter.name)     ❤️  :\(fighter.health)    💥:\(fighter.weapon.damages)    ⚔️  :\(fighter.weapon.name)    🧪:\(fighter.potion)
                 
                 """)
         }
