@@ -157,6 +157,19 @@ class Game {
         selectFighterToRename(player: player)
     }
     
+    /// Main Fight Method
+    func fight(first: Player, second: Player){
+        print(Messages.fight.rawValue)
+        while true {
+            // Player One Round
+            selectAttacker(first: first, second: second)
+            winner(first: first, second: second)
+            // Player Two Round
+            selectAttacker(first: second, second: first)
+            winner(first: first, second: second)
+        }
+    }
+    
     /// Select attacker
     func selectAttacker(first: Player, second:Player){
         print("""
@@ -282,19 +295,6 @@ class Game {
             guard let randomPotion = MagicPotionType(rawValue: Int.random(in:1...3)) else {return}
             attacker.potion = randomPotion.name
             attacker.healingPoints = randomPotion.points
-        }
-    }
-    
-    /// Main Fight Method
-    func fight(first: Player, second: Player){
-        print(Messages.fight.rawValue)
-        while true {
-            // Player One Round
-            selectAttacker(first: first, second: second)
-            winner(first: first, second: second)
-            // Player Two Round
-            selectAttacker(first: second, second: first)
-            winner(first: first, second: second)
         }
     }
     
