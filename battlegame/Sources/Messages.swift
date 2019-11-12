@@ -78,7 +78,7 @@ enum Messages: String {
     """
     case finish = """
     
-    4. yes
+    4. Finish rename
     
     """
     case renamingTerminated = """
